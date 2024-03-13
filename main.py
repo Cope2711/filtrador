@@ -1,22 +1,20 @@
 import tkinter
 import functions
+import re
 
 def processDataBTN_Function():
     dataList = functions.convertTxTtoList(dataListTB1)
+    
     if functions.containData(lineLongerThanTB):
         lenRequired = int(lineLongerThanTB.get("1.0", "end"))
         dataList = [data for data in dataList if len(data) >= lenRequired]
     if functions.containData(lineLessThanTB):
         lenRequired = int(lineLessThanTB.get("1.0", "end"))
         dataList = [data for data in dataList if len(data) <=lenRequired]
-    if functions.containData(lineLessThanTB):
+    if functions.containData(deleteThisTB):
         dataToFiltred = deleteThisTB.get("1.0", "end")
-        print(dataToFiltred)
-        for index in range(len(dataList)):
-            for char in dataToFiltred:
-                dataList[index].replace(char, "")
-            
-        
+        for char in dataToFiltred:
+            dataList = [item.replace(char, "") for item in dataList]
 
     functions.insertText(dataList, dataProcesedTB)
 
