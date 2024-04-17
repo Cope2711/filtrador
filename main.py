@@ -1,10 +1,9 @@
 import tkinter
 import functions
-import re
 
 def processDataBTN_Function():
     dataList = functions.convertTxTtoList(dataListTB1)
-    
+    originalLen = len(dataList)
     if functions.containData(lineLongerThanTB):
         lenRequired = int(lineLongerThanTB.get("1.0", "end"))
         dataList = [data for data in dataList if len(data) >= lenRequired]
@@ -15,7 +14,13 @@ def processDataBTN_Function():
         dataToFiltred = deleteThisTB.get("1.0", "end")
         for char in dataToFiltred:
             dataList = [item.replace(char, "") for item in dataList]
+    if deleteEqualCHBVar.get():
+        dataList = list(set(dataList))
 
+
+    procesedDataLen = len(dataList)
+    functions.addTextToLabel(dataListTBLBL1, " - " + str(originalLen))
+    functions.addTextToLabel(dataProcesedTBLBL, " - " + str(procesedDataLen))
     functions.insertText(dataList, dataProcesedTB)
 
 def onlyIntWrite(event):
@@ -28,7 +33,7 @@ def onlyIntWrite(event):
 
 # Crear la ventana principal
 root = tkinter.Tk()
-root.geometry("1000x500")
+root.geometry("900x500")
 root.resizable(False, False)
 root.title("Recepción de Listas")
 
@@ -64,6 +69,11 @@ deleteThisTBLBL = tkinter.Label(root, text="Eliminar estos datos de cada linea:"
 deleteThisTBLBL.place(x=550, y=80)
 deleteThisTB = tkinter.Text(root, height=1, width=10, wrap="none")
 deleteThisTB.place(x=550, y=100)
+
+#Eliminar lineas repetida
+deleteEqualCHBVar = tkinter.BooleanVar()
+deleteEqualCHB = tkinter.Checkbutton(root, text="Eliminar lineas iguales (conservar una sola repetición)", variable=deleteEqualCHBVar, onvalue=True, offvalue=False)
+deleteEqualCHB.place(x=550, y=120)
 
 # Botón para procesar los datos
 processDataBTN = tkinter.Button(root, text="Procesar datos", command=processDataBTN_Function)
