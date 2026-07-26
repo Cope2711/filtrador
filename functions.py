@@ -1,8 +1,10 @@
 import tkinter
 
-def containData(textbox: tkinter.Text) -> bool:
-    if len(textbox.get("1.0", "end")) <= 1: return False
-    else: return True
+def containData(textbox: tkinter.Text | tkinter.Entry) -> bool:
+    if isinstance(textbox, tkinter.Text):
+        return bool(textbox.get("1.0", "end-1c").strip())
+
+    return bool(textbox.get().strip())
 
 def insertText(datalist: list[str], textbox: tkinter.Text) -> None:
     """Inserta cada dato del datalist como linea en el textbox y elimina los datos existenes en el textbox"""

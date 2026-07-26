@@ -5,19 +5,21 @@ def processDataBTN_Function():
     dataList = functions.convertTxTtoList(dataListTB1)
     originalLen = len(dataList)
     if functions.containData(lineLongerThanTB):
-        lenRequired = int(lineLongerThanTB.get("1.0", "end"))
+        lenRequired = int(lineLongerThanTB.get())
         dataList = [data for data in dataList if len(data) >= lenRequired]
     if functions.containData(lineLessThanTB):
-        lenRequired = int(lineLessThanTB.get("1.0", "end"))
-        dataList = [data for data in dataList if len(data) <=lenRequired]
+        lenRequired = int(lineLessThanTB.get())
+        dataList = [data for data in dataList if len(data) <= lenRequired]
     if functions.containData(deleteThisTB):
-        dataToFiltred = deleteThisTB.get("1.0", "end")
+        dataToFiltred = deleteThisTB.get()
         for char in dataToFiltred:
             dataList = [item.replace(char, "") for item in dataList]
     if deleteEqualCHBVar.get():
         dataList = list(set(dataList))
-
-
+    procesedDataLen = len(dataList)
+    functions.addTextToLabel(dataListTBLBL1, " - " + str(originalLen))
+    functions.addTextToLabel(dataProcesedTBLBL, " - " + str(procesedDataLen))
+    functions.insertText(dataList, dataProcesedTB)
     procesedDataLen = len(dataList)
     functions.addTextToLabel(dataListTBLBL1, " - " + str(originalLen))
     functions.addTextToLabel(dataProcesedTBLBL, " - " + str(procesedDataLen))
@@ -53,21 +55,21 @@ dataProcesedTB.grid(row=1, column=2, padx=10, pady=5)
 #Mas grande que
 lineLongerThanTBLBL = tkinter.Label(root, text="Longitud de linea mas grande que:")
 lineLongerThanTBLBL.place(x=550, y=0)
-lineLongerThanTB = tkinter.Text(root, height=1, width=10, wrap="none")
+lineLongerThanTB = tkinter.Entry(root, width=10)
 lineLongerThanTB.bind("<Key>", onlyIntWrite)
 lineLongerThanTB.place(x=550, y=20)
 
 #Menos grande que
 lineLessThanTBLBL = tkinter.Label(root, text="Longitud de linea menos grande que:")
 lineLessThanTBLBL.place(x=550, y=40)
-lineLessThanTB = tkinter.Text(root, height=1, width=10, wrap="none")
+lineLessThanTB = tkinter.Entry(root, width=10)
 lineLessThanTB.bind("<Key>", onlyIntWrite)
 lineLessThanTB.place(x=550, y=60)
 
 #Eliminar estos datos de las lineas
 deleteThisTBLBL = tkinter.Label(root, text="Eliminar estos datos de cada linea:")
 deleteThisTBLBL.place(x=550, y=80)
-deleteThisTB = tkinter.Text(root, height=1, width=10, wrap="none")
+deleteThisTB = tkinter.Entry(root, width=10)
 deleteThisTB.place(x=550, y=100)
 
 #Eliminar lineas repetida
@@ -78,6 +80,9 @@ deleteEqualCHB.place(x=550, y=120)
 # Botón para procesar los datos
 processDataBTN = tkinter.Button(root, text="Procesar datos", command=processDataBTN_Function)
 processDataBTN.grid(row=2, columnspan=3, pady=10)
+
+# Ejecutar el filtrado al presionar enter
+root.bind("<Return>", lambda event: processDataBTN_Function())
 
 # Iniciar el bucle principal
 root.mainloop()
